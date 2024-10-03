@@ -1,0 +1,102 @@
+/* Overall container */
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    min-height: 100vh;
+    background-color: #f7f8fa;
+    padding: 10px;
+  }
+  
+  /* Navbar */
+  .navbar {
+    width: 100%;
+    padding-left: 8%;
+    display: flex;
+    
+  }
+  
+  .navbar img {
+    height: 60px;
+    width: auto;
+  }
+  
+  /* Main content section */
+  .content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+      /* Reduced the margin-top for less space between the navbar and content */
+    width: 100%;
+    max-width: 1200px;
+    padding-bottom: 180px;
+  }
+  
+  /* Left content styling */
+  .left_content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .left_content h1 {
+    font-size: 3rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .left_content p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+  
+  /* Button styling */
+  .btn a {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn a:hover {
+    background-color: #218838;
+  }
+  
+  /* Right content styling */
+  .right_content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:auto;
+    height:60px;
+  }
+  
+  .right_content img {
+    width: fit-content;
+    max-width: 100%;
+    height: auto;
+    border-radius: 30px;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .content {
+      flex-direction: column;
+    }
+  
+    .left_content h1 {
+      font-size: 2
+    }
+}

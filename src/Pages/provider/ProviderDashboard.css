@@ -1,0 +1,145 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #e0eafc, #cfdef3); /* Soft gradient background */
+  margin: 0;
+  padding: 0;
+}
+
+/* Dashboard Container */
+.dashboard-container_p {
+  width: 80%;
+  margin: auto;
+  padding: 30px;
+  background-color: #ffffff; /* Light background for contrast */
+  border-radius: 20px; /* More rounded corners */
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2); /* More pronounced shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-container_p:hover {
+  transform: translateY(-5px); /* Lift effect on hover */
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3); /* Darker shadow on hover */
+}
+
+.title_p {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.title_p h1 {
+  font-size: 40px; /* Larger font size for title */
+  color: #007bff; /* Blue color for the title */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+/* Profile Section */
+.profile-section_p {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  background-color: #f0f4f8;
+  padding: 30px;
+  border-radius: 20px; /* More rounded corners */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-section_p:hover {
+  transform: scale(1.02); /* Slight scaling effect on hover */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25); /* Darker shadow on hover */
+}
+
+.profile-picture_p {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  margin-right: 25px;
+  border: 6px solid #007bff; /* Blue border for the profile picture */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.profile-details_p h2 {
+  margin: 0;
+  color: #333; /* Dark color for the name */
+  font-size: 32px; /* Larger font size for name */
+  letter-spacing: 1px; /* Slightly spaced letters */
+}
+
+.profile-details_p p {
+  margin: 5px 0;
+  color: #555;
+  font-size: 16px;
+}
+
+/* Assigned Job Section */
+.assigned-job-section_p,
+.ratings-section_p,
+.past-bookings-section_p {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  margin-bottom: 30px;
+  transition: transform 0.3s ease;
+}
+
+.assigned-job-section_p:hover,
+.ratings-section_p:hover,
+.past-bookings-section_p:hover {
+  transform: scale(1.01); /* Slight scaling effect on hover */
+}
+
+.assigned-job-section_p h3,
+.ratings-section_p h3,
+.past-bookings-section_p h3 {
+  margin: 0 0 15px 0;
+  color: #007bff; /* Blue color for section headers */
+  font-size: 28px; /* Slightly larger font size */
+  text-transform: uppercase; /* Uppercase letters for section titles */
+}
+
+/* Past Bookings Table */
+.past-bookings-table_p {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.past-bookings-table_p th,
+.past-bookings-table_p td {
+  padding: 15px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.past-bookings-table_p th {
+  background-color: #007bff; /* Blue header */
+  color: white;
+  border-top-left-radius: 20px; /* Rounded corners */
+  border-top-right-radius: 20px; /* Rounded corners */
+  font-size: 18px; /* Increased font size for headers */
+  font-weight: bold; /* Bold headers */
+}
+
+.past-bookings-table_p tr:nth-child(even) {
+  background-color: #f2f2f2; /* Light gray for even rows */
+}
+
+.past-bookings-table_p tr:hover {
+  background-color: rgba(0, 123, 255, 0.2); /* Light blue on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-container_p {
+    width: 95%;
+  }
+
+  .profile-section_p {
+    flex-direction: column; /* Stack elements in smaller screens */
+    align-items: center;
+  }
+
+  .profile-picture_P {
+    margin-bottom: 15px; /* Add margin below the image */
+  }
+}

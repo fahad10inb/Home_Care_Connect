@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../../firebase'; // Firebase imports
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore"; // Firestore to set user data
-import './UserRegister.css'; // Ensure you have the correct CSS file for styling
+import './ProviderRegister.css'; // Ensure you have the correct CSS file for styling
 
 const ProviderRegister = () => {
     const [fullName, setFullName] = useState('');

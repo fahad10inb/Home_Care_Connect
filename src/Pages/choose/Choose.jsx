@@ -1,20 +1,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../../firebase'; // Ensure this path is correct
-import { createUserWithEmailAndPassword } from "firebase/auth"; // Import Firebase auth functions
 import './Choose.css';
 
 export const Choose = () => {
   const navigate = useNavigate(); // Initialize useNavigate
 
   // Handle customer registration
-  const handleCustomerRegister = async () => {
-    navigate('/register'); // Redirect to customer registration
+  const handleCustomerRegister = () => {
+    navigate('/UserRegister/UserRegister'); // Redirect to UserRegister based on correct path
   };
 
   // Handle provider registration
-  const handleProviderRegister = async () => {
-    navigate('/register'); // Redirect to provider registration
+  const handleProviderRegister = () => {
+    navigate('/ProviderRegister/ProviderRegister'); // Redirect to ProviderRegister based on correct path
   };
 
   return (
@@ -29,8 +27,8 @@ export const Choose = () => {
             If you're looking to access our services, please log in or register to create a new account.
           </p>
           <div className='two_buttons'>
-            <a href='/login' className='card-btn'>Login</a> {/* Link to Customer Login */}
-            <button onClick={handleCustomerRegister} className='card-btn'>Register</button>
+            <a href='/login/UserLogin' className='card-btn'>Login</a> {/* Link to Customer Login */}
+            <button onClick={handleCustomerRegister} className='card-btn'>Register</button> {/* Redirect to UserRegister */}
           </div>
         </div>
 
@@ -40,11 +38,13 @@ export const Choose = () => {
             Trained employees who are ready to offer services to customers can login here.
           </p>
           <div className='two_buttons'>
-            <a href='/plogin' className='card-btn'>Login</a> {/* Link to Provider Login */}
-            <button onClick={handleProviderRegister} className='card-btn'>Register</button>
+            <a href='/login/ProviderLogin' className='card-btn'>Login</a> {/* Link to Provider Login */}
+            <button onClick={handleProviderRegister} className='card-btn'>Register</button> {/* Redirect to ProviderRegister */}
           </div>
         </div>
       </div>
     </div>
   );
 };
+
+export default Choose;

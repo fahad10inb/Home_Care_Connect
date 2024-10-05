@@ -16,7 +16,7 @@ const ProviderLogin = () => {
       const user = userCredential.user;
 
       // Redirect to provider dashboard
-      navigate("/provider");
+      navigate("/provider/ProviderDashboard");
     } catch (error) {
       console.error("Error logging in: ", error);
       alert(

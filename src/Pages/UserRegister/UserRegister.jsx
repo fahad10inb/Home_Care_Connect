@@ -32,7 +32,7 @@ export const UserRegister = () => {
 
             // After successful registration, navigate to user dashboard
             alert(`Registered: ${fullName}, ${username}, ${email}`);
-            navigate("/login"); 
+            navigate("/login/UserLogin"); 
         } catch (error) {
             console.error("Error registering: ", error);
             alert(error.message);

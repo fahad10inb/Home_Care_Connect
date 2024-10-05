@@ -65,7 +65,7 @@ const UserDashboard = () => {
            
             <h3>Cleaning</h3>
             <p>We offer exclusive cleaning facilities using newer electronic gadgets.</p>
-            <button onClick={()=>navigate("/cleaning")}>Search</button>
+            <button onClick={()=>navigate("dashbord/Dashboard")}>Search</button>
           </div>
           <div className="card">
             {/* <FaWordpress /> */}

@@ -16,7 +16,7 @@ export const UserLogin = () => {
       const user = userCredential.user;
 
       // Redirect to user dashboard
-      navigate("/dashboard");
+      navigate("/dashboard/Dashboard");
     } catch (error) {
       console.error("Error logging in: ", error);
       alert(

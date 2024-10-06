@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../../firebase'; // Firebase imports
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore"; // Firestore to set user data
-import './UserRegister.css'; // Ensure you have the correct CSS file for styling
+import './UserRegister.css'; // Custom CSS for styling
 
 export const UserRegister = () => {
     const [fullName, setFullName] = useState('');
@@ -11,6 +11,7 @@ export const UserRegister = () => {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [location, setLocation] = useState(''); // New field for location
 
     const navigate = useNavigate();
 
@@ -27,24 +28,24 @@ export const UserRegister = () => {
                 username: username,
                 email: email,
                 phoneNumber: phoneNumber,
+                location: location, // Storing location
                 role: 'user' // Set the role to user
             });
 
-            // After successful registration, navigate to user dashboard
+            // After successful registration, navigate to user login
             alert(`Registered: ${fullName}, ${username}, ${email}`);
-            navigate("/login/UserLogin"); 
+            navigate("/login/UserLogin");
         } catch (error) {
-            console.error("Error registering: ", error);
-            alert(error.message);
+            alert(error.message); // Handling error
         }
     };
 
     return (
         <div className='register-body'>
             <div className='container_register'>
-                <div className='title_register'>REGISTRATION</div>
+                <div className='title_register'>USER--REGISTRATION</div>
                 <form onSubmit={handleSubmit}>
-                    <div className='user-details'>
+                    <div className='grid-container'>
                         <div className='input-box'>
                             <span className='details'>Full Name</span>
                             <input
@@ -95,13 +96,23 @@ export const UserRegister = () => {
                                 onChange={(e) => setPhoneNumber(e.target.value)}
                             />
                         </div>
-                        <div className='button'>
-                            <input type='submit' value="Register" />
+                        <div className='input-box'>
+                            <span className='details'>Location</span>
+                            <input
+                                type="text"
+                                placeholder='Enter Your Location'
+                                required
+                                value={location}
+                                onChange={(e) => setLocation(e.target.value)}
+                            />
                         </div>
+                    </div>
+                    <div className='button'>
+                        <input type='submit' value="Register" />
                     </div>
                 </form>
                 <div className='login-redirect'>
-                    <p>Already have an account? <span onClick={() => navigate('/login')} style={{ cursor: 'pointer', color: 'blue' }}>Login here</span>.</p>
+                    <p>Already have an account? <span onClick={() => navigate('/login/UserLogin')} style={{ cursor: 'pointer', color: 'blue' }}>Login here</span>.</p>
                 </div>
             </div>
         </div>

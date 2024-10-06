@@ -1,124 +1,96 @@
 import React from 'react'
-import logo from "../../images/logo.jpeg";
-import pic from "../../images/pic.jpeg";
-import { FaUsers } from 'react-icons/fa';
-import {useNavigate} from "react-router-dom";
+import { Home, HelpCircle, User, LogOut, Droplet, Zap, Trash2 } from 'lucide-react'
+import './UserDashboard.css'
+import { useNavigate } from 'react-router-dom';
 
-import './UserDashboard.css';
-import { FaHome, FaUser, FaWallet, FaChartBar, FaTasks, FaCog, FaQuestionCircle, FaSignOutAlt, FaUserCog, FaLaptopCode, FaWordpress, FaPalette, FaAppStoreIos, FaHtml5, FaCss3Alt, FaJsSquare } from 'react-icons/fa';
-
-const UserDashboard = () => {
-    const navigate = useNavigate();
+export default function UserDashboard() {
+  const navigate = useNavigate();
   return (
-    <div className="container_dashboard">
-      <nav>
-        <ul>
-          <li>
-            <a href="#" className="logo">
-              <img src={logo} alt="" />
-              <span className="nav-item">DashBoard</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <FaHome />
-              <span className="nav-item">Home</span>
-            </a>
-          </li>
-          <li>
-            <a href="/user">
-              <FaUser />
-              <span className="nav-item">Profile</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <FaWallet />
-              <span className="nav-item">Dashboard</span>
-            </a>
-          </li>
-          
-         
-          <li>
-            <a href="#">
-              <FaQuestionCircle />
-              <span className="nav-item">Help</span>
-            </a>
-          </li>
-          <li>
-            <a href="#" className="logout">
-              <FaSignOutAlt />
-              <span className="nav-item">Log out</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-
-      <section className="main">
-        <div className="main-top">
-          <h1>Services Offered</h1>
-          <FaUserCog />{/* on clicking this icon,profile must be displayed */}
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-64 bg-[#4B49AC] text-white">
+        <div className="p-4">
+          <h2 className="text-2xl font-bold">Home Care Connect</h2>
         </div>
+        <nav className="mt-8">
+          <a href="/" className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#7978E9]">
+            <Home className="inline-block mr-2" size={20} />
+            Home
+          </a>
+          <a href="/dashboard/Dashboard" className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#7978E9]">
+            <User className="inline-block mr-2" size={20} />
+            Dashboard
+          </a>
+          <a href="/" className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#7978E9]">
+            <HelpCircle className="inline-block mr-2" size={20} />
+            Help
+          </a>
+          <a href="/dashboard/UserProfile" className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#7978E9]">
+            <User className="inline-block mr-2" size={20} />
+            Profile
+          </a>
+          <a href="/" className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#7978E9]">
+            <LogOut className="inline-block mr-2" size={20} />
+            Logout
+          </a>
+        </nav>
+      </aside>
 
-        <div className="main-skills">
-          <div className="card">
-           
-            <h3>Cleaning</h3>
-            <p>We offer exclusive cleaning facilities using newer electronic gadgets.</p>
-            <button onClick={()=>navigate("dashbord/Dashboard")}>Search</button>
+      {/* Main content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Navbar */}
+        <header className="flex items-center justify-between p-4 bg-white shadow-md">
+          <div className="flex items-center">
+            <Home className="text-[#4B49AC]" size={24} />
+            <h1 className="ml-2 text-xl font-semibold text-[#4B49AC]">Home Care Connect</h1>
           </div>
-          <div className="card">
-            {/* <FaWordpress /> */}
-            <h3>PLUMBING</h3>
-            <p>We offer exclusive cleaning facilities using newer electronic gadgets.</p>
-            <button>Search</button>
+          <div className="w-10 h-10 rounded-full bg-[#98BDFF] flex items-center justify-center">
+            <User className="text-white" size={20} />
           </div>
-          <div className="card">
-            {/* <FaPalette /> */}
-            <h3>Electricity</h3>
-            <p>We offer exclusive cleaning facilities using newer electronic gadgets.</p>
-            <button>Search</button>
-          </div>
-          {/* <div className="card">
-            <FaAppStoreIos />
-            <h3>IOS dev</h3>
-            <p>Join Over 1 million Students.</p>
-            <button>Get Started</button>
-          </div> */}
-        </div>
+        </header>
 
-        <section className="main-course">
-          <h1>Reviews</h1>
-          <div className="course-box">
-            {/* <ul>
-              <li className="active">In progress</li>
-              <li>Explore</li>
-              <li>Incoming</li>
-              <li>Finished</li>
-            </ul> */}
-            <div className="course">
-              <div className="box">
-              <h3>A Happy Customer</h3>
-              <p>Amazing service! I couldn't be happier with my experience!</p>
-                <FaUsers className="people1" />
-
+        {/* Dashboard content */}
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6">Services Dashboard</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Cleaning Card */}
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              <div className="p-6">
+                <Trash2 className="text-[#F3797E] mb-4" size={48} />
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">Cleaning Services</h3>
+                <p className="text-gray-600 mb-4">Professional cleaning for your home or office.</p>
+                <button className="bg-[#F3797E] text-white py-2 px-4 rounded hover:bg-[#e66b70] transition-colors duration-300" onClick={()=>navigate("/cleaning")} >
+                  Find Cleaners
+                </button>
               </div>
-              <div className="box">
-              <h3>A Happy Customer</h3>
-              <p>Amazing service! I couldn't be happier with my experience!</p>
-                <FaUsers className="people2" />
+            </div>
+
+            {/* Plumbing Card */}
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              <div className="p-6">
+                <Droplet className="text-[#7DA0FA] mb-4" size={48} />
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">Plumbing Services</h3>
+                <p className="text-gray-600 mb-4">Expert plumbers for all your plumbing needs.</p>
+                <button className="bg-[#7DA0FA] text-white py-2 px-4 rounded hover:bg-[#6a8fe3] transition-colors duration-300" onClick={()=>navigate("/plumber")}>
+                  Find Plumbers
+                </button>
               </div>
-              <div className="box">
-                <h3>A Happy Customer</h3>
-                <p>Amazing service! I couldn't be happier with my experience!</p>
-                {/* <button>Continue</button> */}
-                <FaUsers className="people3" />
+            </div>
+
+            {/* Electricity Card */}
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              <div className="p-6">
+                <Zap className="text-[#7978E9] mb-4" size={48} />
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">Electrical Services</h3>
+                <p className="text-gray-600 mb-4">Skilled electricians for all electrical repairs.</p>
+                <button className="bg-[#7978E9] text-white py-2 px-4 rounded hover:bg-[#6a69d2] transition-colors duration-300" onClick={()=>navigate("/electricity")}>
+                  Find Electricians
+                </button>
               </div>
             </div>
           </div>
-        </section>
-      </section>
+        </main>
+      </div>
     </div>
-  );
-};
-export default UserDashboard;
+  )
+}

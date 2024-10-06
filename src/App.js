@@ -1,4 +1,5 @@
 import React from 'react';
+import './index.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Pages/home/Home"; // Ensure this is the correct default import
 import Choose from "./Pages/choose/Choose";
@@ -10,7 +11,8 @@ import ProviderDashboard from "./Pages/provider/ProviderDashboard";
 import UserProfile from "./Pages/dashboard/UserProfile";
 import ProviderLogin from "./Pages/login/ProviderLogin";
 import ProviderRegister from "./Pages/ProviderRegister/ProviderRegister"; // Adjust the path accordingly
-
+import PlumberDashboard from './Pages/dashboard/PlumberDashboard';
+import ElectricityDashboard from './Pages/dashboard/ElectricityDashboard';
 function App() {
   return (
     <BrowserRouter>
@@ -25,6 +27,8 @@ function App() {
         <Route path="/provider/ProviderDashboard" element={<ProviderDashboard />} />
         <Route path="/dashboard/UserProfile" element={<UserProfile />} />
         <Route path="/login/ProviderLogin" element={<ProviderLogin />} />
+        <Route path="/plumber" element={<PlumberDashboard />} />
+        <Route path="/electricity" element={<ElectricityDashboard />} />
       </Routes>
     </BrowserRouter>
   );

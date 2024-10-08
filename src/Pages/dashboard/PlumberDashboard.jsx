@@ -1,58 +1,73 @@
-import React, { useState } from 'react'
-import { Home, HelpCircle, User, LogOut, X } from 'lucide-react'
-import {useNavigate} from "react-router-dom";
+import React, { useState } from 'react';
+import { Home, HelpCircle, User, LogOut, X } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
+
 const workers = [
   { 
     id: 1, 
-    name: 'John Doe', 
-    email: 'john@example.com', 
+    name: 'Aarav Shah', 
+    email: 'aaravshah@gmail.com', 
     rating: 4.8, 
-    phone: '123-456-7890', 
-    about: 'John is a dedicated cleaner with 5 years of experience in residential and commercial cleaning.',
+    phone: '9876543210', 
+    about: 'Aarav is a dedicated plumber with 5 years of experience in residential and commercial plumbing services.',
     image: 'https://www.shutterstock.com/image-photo/portrait-african-black-worker-standing-600nw-2114436797.jpg'
   },
   { 
     id: 2, 
-    name: 'Jane Smith', 
-    email: 'jane@example.com', 
+    name: 'Pooja Verma', 
+    email: 'poojaverma@gmail.com', 
     rating: 4.9, 
-    phone: '234-567-8901', 
-    about: 'Jane specializes in deep cleaning and organization, ensuring every corner of your space sparkles.',
+    phone: '8765432109', 
+    about: 'Pooja specializes in plumbing repairs and installations, ensuring your plumbing system functions perfectly.',
     image: 'https://media.istockphoto.com/id/1430852855/photo/happy-engineer-construction-worker-or-architect-woman-feeling-proud-and-satisfied-with-career.jpg?s=612x612&w=0&k=20&c=GHed-u9xlIYefGqLp4jgiN0J5H_kvNOrUQXkL08xUoc='
   },
   { 
     id: 3, 
-    name: 'Mike Johnson', 
-    email: 'mike@example.com', 
+    name: 'Ravi Kumar', 
+    email: 'ravikumar@gmail.com', 
     rating: 4.7, 
-    phone: '345-678-9012', 
-    about: 'Mike is known for his attention to detail and efficiency, providing top-notch cleaning services.',
+    phone: '7654321098', 
+    about: 'Ravi is known for his expertise in plumbing maintenance, providing reliable and efficient services.',
     image: 'https://www.familyhandyman.com/wp-content/uploads/2021/03/woman-construction-worker-GettyImages-463207617.jpg'
   },
-]
+];
 
 export default function PlumberDashboard() {
-  const [selectedWorker, setSelectedWorker] = useState(null)
-  const [bookingDate, setBookingDate] = useState('')
-  const [bookingTime, setBookingTime] = useState('')
-  const [successMessage, setSuccessMessage] = useState('') // State for success message
+  const [selectedWorker, setSelectedWorker] = useState(null);
+  const [bookingDate, setBookingDate] = useState('');
+  const [bookingTime, setBookingTime] = useState('');
+  const [successMessage, setSuccessMessage] = useState(''); 
+  const [location, setLocation] = useState('');
   const navigate = useNavigate();
+
   const openModal = (worker) => {
-    setSelectedWorker(worker)
-  }
+    setSelectedWorker(worker);
+  };
 
   const closeModal = () => {
-    setSelectedWorker(null)
-    setBookingDate('')
-    setBookingTime('')
-    setSuccessMessage('') // Reset success message on close
-  }
+    setSelectedWorker(null);
+    setBookingDate('');
+    setBookingTime('');
+    setLocation('');
+    setSuccessMessage('');
+  };
 
   const confirmBooking = () => {
-    setSuccessMessage(`Booking successful for ${selectedWorker.name}!`)
-    // You can also close the modal here if needed
-    // closeModal();
-  }
+    const bookingInfo = {
+      workerName: selectedWorker.name,
+      email: selectedWorker.email,
+      phone: selectedWorker.phone,
+      bookingDate: bookingDate,
+      bookingTime: bookingTime,
+      location: location,
+    };
+
+    const existingBookings = JSON.parse(localStorage.getItem('bookings')) || [];
+    existingBookings.push(bookingInfo);
+    localStorage.setItem('bookings', JSON.stringify(existingBookings));
+
+    setSuccessMessage(`Booking successful for ${selectedWorker.name} on ${bookingDate} at ${bookingTime}!`);
+  };
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -68,19 +83,15 @@ export default function PlumberDashboard() {
               href="#"
               onClick={() => {
                 if (index === 0) {
-                  navigate('/'); // Redirect to home
-                }
-                else if(index===1){
-                    navigate('/dashboard/Dashboard');
-                }
-                else if(index===2){
-                    navigate('/');
-                }
-                else if(index===3){
-                    navigate('/dashboard/UserProfile');
-                }
-                else if(index===4){
-                    navigate('/');
+                  navigate('/'); 
+                } else if (index === 1) {
+                  navigate('/dashboard/Dashboard');
+                } else if (index === 2) {
+                  navigate('/'); 
+                } else if (index === 3) {
+                  navigate('/dashboard/UserProfile');
+                } else if (index === 4) {
+                  navigate('/'); 
                 }
               }}
               className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-[#7978E9] hover:translate-x-1"
@@ -138,7 +149,7 @@ export default function PlumberDashboard() {
       {/* Booking Modal */}
       {selectedWorker && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-8 max-w-lg w-full relative"> {/* Increased width */}
+          <div className="bg-white rounded-lg p-8 max-w-lg w-full relative">
             <button
               onClick={closeModal}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-transform duration-300 hover:scale-110"
@@ -153,30 +164,44 @@ export default function PlumberDashboard() {
             <p className="text-gray-600 mb-2">Email: {selectedWorker.email}</p>
             <p className="text-gray-600 mb-2">Phone: {selectedWorker.phone}</p>
             <p className="text-gray-600 mb-4">Rating: {selectedWorker.rating}/5</p>
-            {successMessage && <p className="text-green-600 mb-4">{successMessage}</p>} {/* Success message */}
-            <div className="space-y-4">
-              <input
-                type="date"
-                value={bookingDate}
-                onChange={(e) => setBookingDate(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded focus:border-[#4B49AC] focus:outline-none transition-colors duration-300"
-              />
-              <input
-                type="time"
-                value={bookingTime}
-                onChange={(e) => setBookingTime(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded focus:border-[#4B49AC] focus:outline-none transition-colors duration-300"
-              />
-              <button
-                onClick={confirmBooking}
-                className="w-full bg-[#4B49AC] text-white py-2 px-4 rounded transition-all duration-300 hover:bg-[#3f3e91] hover:scale-105"
-              >
-                Confirm Booking
-              </button>
-            </div>
+
+            <label className="block mb-2">Booking Date:</label>
+            <input
+              type="date"
+              value={bookingDate}
+              onChange={(e) => setBookingDate(e.target.value)}
+              className="border border-gray-300 p-2 rounded w-full mb-4"
+              required
+            />
+            <label className="block mb-2">Booking Time:</label>
+            <input
+              type="time"
+              value={bookingTime}
+              onChange={(e) => setBookingTime(e.target.value)}
+              className="border border-gray-300 p-2 rounded w-full mb-4"
+              required
+            />
+            <label className="block mb-2">Location:</label>
+            <input
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder="Enter your location"
+              className="border border-gray-300 p-2 rounded w-full mb-4"
+              required
+            />
+
+            <button
+              onClick={confirmBooking}
+              className="bg-[#4B49AC] text-white py-2 px-4 rounded hover:bg-[#3f3e91] transition-all duration-300 w-full"
+            >
+              Confirm Booking
+            </button>
+
+            {successMessage && <p className="mt-4 text-green-500">{successMessage}</p>}
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }

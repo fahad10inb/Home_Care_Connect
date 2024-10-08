@@ -6,17 +6,31 @@ import { setDoc, doc } from "firebase/firestore"; // Firestore to set user data
 import './UserRegister.css'; // Custom CSS for styling
 
 export const UserRegister = () => {
-    const [fullName, setFullName] = useState('');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [location, setLocation] = useState(''); // New field for location
+    // State variables to handle form input fields
+    const [userData, setUserData] = useState({
+        fullName: '',
+        username: '',
+        password: '',
+        email: '',
+        phoneNumber: '',
+        location: '',
+    });
 
     const navigate = useNavigate();
 
+    // Function to handle form input changes
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUserData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    // Function to handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const { fullName, username, password, email, phoneNumber, location } = userData;
         try {
             // Create user in Firebase Authentication
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -28,82 +42,99 @@ export const UserRegister = () => {
                 username: username,
                 email: email,
                 phoneNumber: phoneNumber,
-                location: location, // Storing location
+                location: location,
                 role: 'user' // Set the role to user
             });
 
+            // Store user data in localStorage for access elsewhere
+            const userInfo = {
+                uid: user.uid,
+                fullName: fullName,
+                username: username,
+                email: email,
+                phoneNumber: phoneNumber,
+                location: location,
+            };
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
+
             // After successful registration, navigate to user login
-            alert(`Registered: ${fullName}, ${username}, ${email}`);
+            alert(`Registered successfully: ${fullName}`);
             navigate("/login/UserLogin");
         } catch (error) {
-            alert(error.message); // Handling error
+            alert(`Error: ${error.message}`); // Handle registration errors
         }
     };
 
     return (
         <div className='register-body'>
             <div className='container_register'>
-                <div className='title_register'>USER--REGISTRATION</div>
+                <div className='title_register'>USER REGISTRATION</div>
                 <form onSubmit={handleSubmit}>
                     <div className='grid-container'>
                         <div className='input-box'>
                             <span className='details'>Full Name</span>
                             <input
                                 type="text"
+                                name="fullName"
                                 placeholder='Enter Your Name'
                                 required
-                                value={fullName}
-                                onChange={(e) => setFullName(e.target.value)}
+                                value={userData.fullName}
+                                onChange={handleInputChange}
                             />
                         </div>
                         <div className='input-box'>
                             <span className='details'>User Name</span>
                             <input
                                 type="text"
+                                name="username"
                                 placeholder='Enter Your User Name'
                                 required
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                value={userData.username}
+                                onChange={handleInputChange}
                             />
                         </div>
                         <div className='input-box'>
                             <span className='details'>Password</span>
                             <input
                                 type="password"
+                                name="password"
                                 placeholder='Enter Your Password'
                                 required
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                value={userData.password}
+                                onChange={handleInputChange}
                             />
                         </div>
                         <div className='input-box'>
                             <span className='details'>Email</span>
                             <input
                                 type="email"
-                                placeholder='Enter Your email'
+                                name="email"
+                                placeholder='Enter Your Email'
                                 required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                value={userData.email}
+                                onChange={handleInputChange}
                             />
                         </div>
                         <div className='input-box'>
                             <span className='details'>Phone Number</span>
                             <input
                                 type="text"
-                                placeholder='Enter Your phone number'
+                                name="phoneNumber"
+                                placeholder='Enter Your Phone Number'
                                 required
-                                value={phoneNumber}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                value={userData.phoneNumber}
+                                onChange={handleInputChange}
                             />
                         </div>
                         <div className='input-box'>
                             <span className='details'>Location</span>
                             <input
                                 type="text"
+                                name="location"
                                 placeholder='Enter Your Location'
                                 required
-                                value={location}
-                                onChange={(e) => setLocation(e.target.value)}
+                                value={userData.location}
+                                onChange={handleInputChange}
                             />
                         </div>
                     </div>
@@ -112,7 +143,11 @@ export const UserRegister = () => {
                     </div>
                 </form>
                 <div className='login-redirect'>
-                    <p>Already have an account? <span onClick={() => navigate('/login/UserLogin')} style={{ cursor: 'pointer', color: 'blue' }}>Login here</span>.</p>
+                    <p>Already have an account? 
+                        <span onClick={() => navigate('/login/UserLogin')} style={{ cursor: 'pointer', color: 'blue' }}>
+                            Login here
+                        </span>.
+                    </p>
                 </div>
             </div>
         </div>

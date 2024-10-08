@@ -1,32 +1,33 @@
 import React, { useState } from 'react'
 import { Home, HelpCircle, User, LogOut, X } from 'lucide-react'
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 const workers = [
   { 
     id: 1, 
-    name: 'John Doe', 
-    email: 'john@example.com', 
+    name: 'Ravi Kumar', 
+    email: 'ravikumar@gmail.com', 
     rating: 4.8, 
-    phone: '123-456-7890', 
-    about: 'John is a dedicated cleaner with 5 years of experience in residential and commercial cleaning.',
+    phone: '+91 98765 43210', 
+    about: 'Ravi is a dedicated cleaner with 5 years of experience in residential and commercial cleaning.',
     image: 'https://www.shutterstock.com/image-photo/portrait-african-black-worker-standing-600nw-2114436797.jpg'
   },
   { 
     id: 2, 
-    name: 'Jane Smith', 
-    email: 'jane@example.com', 
+    name: 'Priya Singh', 
+    email: 'priyasingh@gmail.com', 
     rating: 4.9, 
-    phone: '234-567-8901', 
-    about: 'Jane specializes in deep cleaning and organization, ensuring every corner of your space sparkles.',
+    phone: '+91 87654 32109', 
+    about: 'Priya specializes in deep cleaning and organization, ensuring every corner of your space sparkles.',
     image: 'https://media.istockphoto.com/id/1430852855/photo/happy-engineer-construction-worker-or-architect-woman-feeling-proud-and-satisfied-with-career.jpg?s=612x612&w=0&k=20&c=GHed-u9xlIYefGqLp4jgiN0J5H_kvNOrUQXkL08xUoc='
   },
   { 
     id: 3, 
-    name: 'Mike Johnson', 
-    email: 'mike@example.com', 
+    name: 'Amit Sharma', 
+    email: 'amitsharma@gmail.com', 
     rating: 4.7, 
-    phone: '345-678-9012', 
-    about: 'Mike is known for his attention to detail and efficiency, providing top-notch cleaning services.',
+    phone: '+91 76543 21098', 
+    about: 'Amit is known for his attention to detail and efficiency, providing top-notch cleaning services.',
     image: 'https://www.familyhandyman.com/wp-content/uploads/2021/03/woman-construction-worker-GettyImages-463207617.jpg'
   },
 ]
@@ -37,6 +38,7 @@ export default function ElectricityDashboard() {
   const [bookingTime, setBookingTime] = useState('')
   const [successMessage, setSuccessMessage] = useState('') // State for success message
   const navigate = useNavigate();
+  
   const openModal = (worker) => {
     setSelectedWorker(worker)
   }
@@ -70,16 +72,16 @@ export default function ElectricityDashboard() {
                 if (index === 0) {
                   navigate('/'); // Redirect to home
                 }
-                else if(index===1){
+                else if(index === 1){
                     navigate('/dashboard/Dashboard');
                 }
-                else if(index===2){
+                else if(index === 2){
                     navigate('/');
                 }
-                else if(index===3){
+                else if(index === 3){
                     navigate('/dashboard/UserProfile');
                 }
-                else if(index===4){
+                else if(index === 4){
                     navigate('/');
                 }
               }}
@@ -169,7 +171,7 @@ export default function ElectricityDashboard() {
               />
               <button
                 onClick={confirmBooking}
-                className="w-full bg-[#4B49AC] text-white py-2 px-4 rounded transition-all duration-300 hover:bg-[#3f3e91] hover:scale-105"
+                className="w-full bg-[#4B49AC] text-white py-2 rounded transition-all duration-300 hover:bg-[#3f3e91]"
               >
                 Confirm Booking
               </button>

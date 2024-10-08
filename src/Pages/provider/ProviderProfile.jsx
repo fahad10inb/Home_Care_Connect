@@ -1,94 +1,111 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { auth, db } from '../../firebase'; // Firebase imports
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 const ProviderProfile = () => {
     const navigate = useNavigate();
     
-    // Example provider data
-    const provider = {
-        name: 'John Doe',
-        username: 'john123',
-        email: 'john@example.com',
-        phone: '123-456-7890',
-        serviceType: 'Plumbing',
-        isAvailable: true
+    const [provider, setProvider] = useState(null);
+    const [isAvailable, setIsAvailable] = useState(false);
+
+    const providerId = auth.currentUser?.uid;
+
+    useEffect(() => {
+        if (!providerId) {
+            navigate('/login/ProviderLogin'); // Redirect if not authenticated
+            return;
+        }
+
+        const fetchProviderData = async () => {
+            try {
+                const providerRef = doc(db, 'workers', providerId);
+                const providerSnap = await getDoc(providerRef);
+
+                if (providerSnap.exists()) {
+                    const data = providerSnap.data();
+                    setProvider(data);
+                    setIsAvailable(data.isAvailable || false);
+                } else {
+                    console.error('No such provider!');
+                }
+            } catch (error) {
+                console.error('Error fetching provider data: ', error);
+            }
+        };
+
+        fetchProviderData();
+    }, [providerId, navigate]);
+
+    const handleAvailabilityToggle = async () => {
+        try {
+            const newAvailability = !isAvailable;
+            setIsAvailable(newAvailability);
+
+            const providerRef = doc(db, 'workers', providerId);
+            await updateDoc(providerRef, { isAvailable: newAvailability });
+        } catch (error) {
+            console.error('Error updating availability: ', error);
+        }
     };
 
-    const [isAvailable, setIsAvailable] = useState(provider.isAvailable);
+    if (!provider) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="flex h-screen bg-gray-100">
             {/* Sidebar */}
-            <div className="bg-[#4B49AC] text-white w-64 p-5 flex flex-col">
+            <div className="bg-blue-500 text-white w-64 p-5 flex flex-col">
                 <h1 className="text-lg font-bold mb-5">Home Care Connect</h1>
                 <ul>
-                    <li className="mb-4 hover:text-gray-300 cursor-pointer" onClick={() => navigate('/')}>Home</li>
-                    <li className="mb-4 hover:text-gray-300 cursor-pointer">Dashboard</li>
-                    <li className="mb-4 hover:text-gray-300 cursor-pointer">Help</li>
-                    <li className="mb-4 hover:text-gray-300 cursor-pointer">Profile</li>
-                    <li className="hover:text-gray-300 cursor-pointer">Logout</li>
+                    <li onClick={() => navigate('/')}>Home</li>
+                    <li>Profile</li>
+                    <li>Logout</li>
                 </ul>
             </div>
 
             {/* Main Content */}
             <div className="flex-1 p-5">
-                {/* Navbar */}
-                <div className="flex items-center justify-between mb-5">
-                    <div className="flex items-center">
-                        <span className="text-2xl mr-2">🏠</span> {/* Home Icon */}
-                        <h1 className="text-2xl font-bold">Home Care Connect</h1>
-                    </div>
-                    <span className="text-2xl">👤</span> {/* Man symbol */}
-                </div>
-
-                {/* Profile Section */}
-                <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
-                    <h2 className="text-2xl font-bold mb-4 text-center">Provider Profile</h2>
+                <div className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
+                    <h2 className="text-2xl font-bold text-center mb-4">Provider Profile</h2>
 
                     <div className="mb-4">
-                        <label className="block font-medium text-gray-700">Name:</label>
-                        <p className="text-gray-900">{provider.name}</p>
+                        <label className="block">Full Name:</label>
+                        <p>{provider.fullName}</p>
                     </div>
 
                     <div className="mb-4">
-                        <label className="block font-medium text-gray-700">Username:</label>
-                        <p className="text-gray-900">{provider.username}</p>
+                        <label className="block">Username:</label>
+                        <p>{provider.username}</p>
                     </div>
 
                     <div className="mb-4">
-                        <label className="block font-medium text-gray-700">Email:</label>
-                        <p className="text-gray-900">{provider.email}</p>
+                        <label className="block">Email:</label>
+                        <p>{provider.email}</p>
                     </div>
 
                     <div className="mb-4">
-                        <label className="block font-medium text-gray-700">Phone Number:</label>
-                        <p className="text-gray-900">{provider.phone}</p>
+                        <label className="block">Phone Number:</label>
+                        <p>{provider.phoneNumber}</p>
                     </div>
 
                     <div className="mb-4">
-                        <label className="block font-medium text-gray-700">Service Type:</label>
-                        <p className="text-gray-900">{provider.serviceType}</p>
+                        <label className="block">Service:</label>
+                        <p>{provider.service}</p>
                     </div>
 
-                    <div className="mb-6 flex items-center justify-between">
-                        <span className="font-medium text-gray-700">Availability:</span>
+                    <div className="mb-4 flex items-center justify-between">
+                        <span>Availability:</span>
                         <div className="flex items-center">
-                            <label className="mr-2">{isAvailable ? 'Available' : 'Not Available'}</label>
+                            <label>{isAvailable ? 'Available' : 'Not Available'}</label>
                             <input
                                 type="checkbox"
                                 checked={isAvailable}
-                                onChange={() => setIsAvailable(!isAvailable)}
-                                className="toggle-checkbox"
+                                onChange={handleAvailabilityToggle}
                             />
                         </div>
                     </div>
-
-                    <button
-                        className="bg-[#98BDFF] text-white rounded px-4 py-2 hover:bg-[#4B49AC] transition duration-300"
-                        onClick={() => alert('Profile Updated!')}
-                    >
-                        Update Profile
-                    </button>
                 </div>
             </div>
         </div>

@@ -23,7 +23,7 @@ const ProviderRegister = () => {
             const user = userCredential.user;
 
             // Store additional user data in Firestore
-            await setDoc(doc(db, "users", user.uid), {
+            await setDoc(doc(db, "workers", user.uid), {
                 fullName: fullName,
                 username: username,
                 email: email,

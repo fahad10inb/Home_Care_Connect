@@ -70,7 +70,7 @@ export default function PlumberDashboard() {
               href="#"
               onClick={() => {
                 if (index === 0) {
-                  navigate('/'); // Redirect to home
+                  navigate('#'); // Redirect to home
                 }
                 else if(index === 1){
                     navigate('/dashboard/Dashboard');

@@ -13,7 +13,7 @@ export default function UserDashboard() {
           <h2 className="text-2xl font-bold">Home Care Connect</h2>
         </div>
         <nav className="mt-8">
-          <a href="/" className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#7978E9]">
+          <a href="#" className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#7978E9]">
             <Home className="inline-block mr-2" size={20} />
             Home
           </a>

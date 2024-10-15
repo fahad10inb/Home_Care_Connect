@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
-import { Home, HelpCircle, User, LogOut, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Home, HelpCircle, User, LogOut } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
+import { db } from '../../firebase'; // Ensure you have your Firebase setup correctly
+import { collection, addDoc, getDoc, doc } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged } from "firebase/auth"; // Use Firebase Auth
 
 const workers = [
   { 
@@ -36,9 +39,25 @@ export default function PlumberDashboard() {
   const [selectedWorker, setSelectedWorker] = useState(null);
   const [bookingDate, setBookingDate] = useState('');
   const [bookingTime, setBookingTime] = useState('');
-  const [successMessage, setSuccessMessage] = useState(''); 
   const [location, setLocation] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [currentUser, setCurrentUser] = useState(null); // Store authenticated user
   const navigate = useNavigate();
+  
+  const auth = getAuth();
+
+  // Listen for user authentication state changes
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user); // Store the authenticated user
+      } else {
+        setCurrentUser(null); // Clear user data if not authenticated
+      }
+    });
+    return () => unsubscribe(); // Clean up the listener on component unmount
+  }, [auth]);
 
   const openModal = (worker) => {
     setSelectedWorker(worker);
@@ -50,23 +69,53 @@ export default function PlumberDashboard() {
     setBookingTime('');
     setLocation('');
     setSuccessMessage('');
+    setErrorMessage('');
   };
 
-  const confirmBooking = () => {
-    const bookingInfo = {
-      workerName: selectedWorker.name,
-      email: selectedWorker.email,
-      phone: selectedWorker.phone,
-      bookingDate: bookingDate,
-      bookingTime: bookingTime,
-      location: location,
-    };
+  const confirmBooking = async () => {
+    if (!currentUser) {
+      setErrorMessage('You must be logged in to book a service.');
+      return;
+    }
 
-    const existingBookings = JSON.parse(localStorage.getItem('bookings')) || [];
-    existingBookings.push(bookingInfo);
-    localStorage.setItem('bookings', JSON.stringify(existingBookings));
+    try {
+      // Fetch user information from Firestore
+      const userDocRef = doc(db, 'users', currentUser.uid); // Assuming 'users' collection in Firestore
+      const userDoc = await getDoc(userDocRef);
+      
+      if (!userDoc.exists()) {
+        setErrorMessage('User not found.');
+        return;
+      }
 
-    setSuccessMessage(`Booking successful for ${selectedWorker.name} on ${bookingDate} at ${bookingTime}!`);
+      const userData = userDoc.data();
+
+      // Booking info
+      const bookingInfo = {
+        username: userData.username ||  "User",
+        userEmail: userData.email || currentUser.email,
+        phoneNumber: userData.phoneNumber || currentUser.phoneNumber || "N/A",
+        bookingDate,
+        bookingTime,
+        location,
+        providerEmail: selectedWorker.email, // Provider email
+      };
+
+      // Save booking info to Firestore under 'jobRequests' collection
+      const bookingsCollection = collection(db, 'jobRequests');
+      await addDoc(bookingsCollection, bookingInfo);
+
+      setSuccessMessage(`Booking successful for ${selectedWorker.name} on ${bookingDate} at ${bookingTime}!`);
+
+      // Delay closing the modal
+      setTimeout(() => {
+        closeModal();
+      }, 2000);
+
+    } catch (error) {
+      console.error("Error adding document: ", error);
+      setErrorMessage('Error occurred while booking. Please try again.');
+    }
   };
 
   return (
@@ -135,73 +184,69 @@ export default function PlumberDashboard() {
                   <p className="text-gray-600 mb-4">Rating: {worker.rating}/5</p>
                   <button
                     onClick={() => openModal(worker)}
-                    className="w-full bg-[#7DA0FA] text-white py-2 px-4 rounded transition-all duration-300 hover:bg-[#6a8fe3] hover:scale-105"
+                    className="w-full bg-[#4B49AC] text-white py-2 rounded-md hover:bg-[#7978E9] transition-all duration-200"
                   >
-                    Book Now
+                    Book Service
                   </button>
                 </div>
               </div>
             ))}
           </div>
+
+          {/* Booking Modal */}
+          {selectedWorker && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white rounded-lg shadow-lg w-11/12 md:w-1/3 p-6">
+                <h2 className="text-xl font-semibold mb-4">Book Service with {selectedWorker.name}</h2>
+                <div>
+                  <label className="block mb-2">Date</label>
+                  <input
+                    type="date"
+                    value={bookingDate}
+                    onChange={(e) => setBookingDate(e.target.value)}
+                    className="border border-gray-300 rounded-md p-2 w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-2">Time</label>
+                  <input
+                    type="time"
+                    value={bookingTime}
+                    onChange={(e) => setBookingTime(e.target.value)}
+                    className="border border-gray-300 rounded-md p-2 w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-2">Location</label>
+                  <input
+                    type="text"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    className="border border-gray-300 rounded-md p-2 w-full"
+                    placeholder="Enter your location"
+                  />
+                </div>
+                {successMessage && <div className="text-green-600 mt-2">{successMessage}</div>}
+                {errorMessage && <div className="text-red-600 mt-2">{errorMessage}</div>}
+                <div className="flex justify-end mt-4">
+                  <button
+                    onClick={closeModal}
+                    className="bg-gray-300 text-black px-4 py-2 rounded-md mr-2"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={confirmBooking}
+                    className="bg-[#4B49AC] text-white px-4 py-2 rounded-md hover:bg-[#7978E9] transition-all duration-200"
+                  >
+                    Confirm Booking
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </main>
       </div>
-
-      {/* Booking Modal */}
-      {selectedWorker && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-8 max-w-lg w-full relative">
-            <button
-              onClick={closeModal}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-transform duration-300 hover:scale-110"
-            >
-              <X size={24} />
-            </button>
-            <h2 className="text-2xl font-semibold mb-4">{selectedWorker.name}</h2>
-            <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-[#7978E9]">
-              <img src={selectedWorker.image} alt={selectedWorker.name} className="w-full h-full object-cover" />
-            </div>
-            <p className="text-gray-600 mb-4">{selectedWorker.about}</p>
-            <p className="text-gray-600 mb-2">Email: {selectedWorker.email}</p>
-            <p className="text-gray-600 mb-2">Phone: {selectedWorker.phone}</p>
-            <p className="text-gray-600 mb-4">Rating: {selectedWorker.rating}/5</p>
-
-            <label className="block mb-2">Booking Date:</label>
-            <input
-              type="date"
-              value={bookingDate}
-              onChange={(e) => setBookingDate(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full mb-4"
-              required
-            />
-            <label className="block mb-2">Booking Time:</label>
-            <input
-              type="time"
-              value={bookingTime}
-              onChange={(e) => setBookingTime(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full mb-4"
-              required
-            />
-            <label className="block mb-2">Location:</label>
-            <input
-              type="text"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder="Enter your location"
-              className="border border-gray-300 p-2 rounded w-full mb-4"
-              required
-            />
-
-            <button
-              onClick={confirmBooking}
-              className="bg-[#4B49AC] text-white py-2 px-4 rounded hover:bg-[#3f3e91] transition-all duration-300 w-full"
-            >
-              Confirm Booking
-            </button>
-
-            {successMessage && <p className="mt-4 text-green-500">{successMessage}</p>}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

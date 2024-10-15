@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../../firebase'; // Firebase imports
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { Home, LayoutDashboard, User, HelpCircle, LogOut } from 'lucide-react';
 
 const ProviderProfile = () => {
     const navigate = useNavigate();
@@ -11,6 +10,9 @@ const ProviderProfile = () => {
     const [isAvailable, setIsAvailable] = useState(false);
 
     const providerId = auth.currentUser?.uid;
+    const providerEmail = auth.currentUser?.email;  // Get the current user's email
+
+    const specialEmails = ['aaravshah@gmail.com', 'ravikumar@gmail.com', 'poojaverma@gmail.com'];  // The three special email IDs
 
     useEffect(() => {
         if (!providerId) {
@@ -28,7 +30,26 @@ const ProviderProfile = () => {
                     setProvider(data);
                     setIsAvailable(data.isAvailable || false);
                 } else {
-                    console.error('No such provider!');
+                    // Check if the provider's email matches one of the special email IDs
+                    if (specialEmails.includes(providerEmail)) {
+                        // Print mock data for special email IDs
+                        console.log(`Provider not found in Firestore for email: ${providerEmail}, displaying default data.`);
+                        const fullName = providerEmail === 'aaravshah@gmail.com' ? 'Aarav Shah' : 
+                                         providerEmail === 'ravikumar@gmail.com' ? 'Ravi Kumar' : 
+                                         providerEmail === 'poojaverma@gmail.com' ? 'Pooja Verma' : 'Mock Name';
+                        const mockData = {
+                            fullName: fullName,
+                            username: fullName.split(' ')[0], // Extract first name for username
+                            email: providerEmail,
+                            phoneNumber: '1234567890',
+                            service: 'Plumbing',
+                            isAvailable: false
+                        };
+                        setProvider(mockData);
+                        setIsAvailable(mockData.isAvailable);
+                    } else {
+                        console.error('No such provider!');
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching provider data: ', error);
@@ -36,7 +57,7 @@ const ProviderProfile = () => {
         };
 
         fetchProviderData();
-    }, [providerId, navigate]);
+    }, [providerId, providerEmail, navigate]);
 
     const handleAvailabilityToggle = async () => {
         try {
@@ -51,78 +72,62 @@ const ProviderProfile = () => {
     };
 
     if (!provider) {
-        return <div className="flex h-screen items-center justify-center bg-gray-100">
-            <div className="text-2xl font-semibold text-gray-600">Loading...</div>
-        </div>;
+        return <div>Loading...</div>;
     }
 
     return (
         <div className="flex h-screen bg-gray-100">
             {/* Sidebar */}
-            <aside className="w-64 bg-[#4B49AC] text-white">
-                <div className="p-4">
-                    <h2 className="text-2xl font-bold">Home Care Connect</h2>
-                </div>
-                <nav className="mt-8">
-                    {[
-                        { name: 'Home', icon: Home, onClick: () => navigate('#') },
-                        { name: 'Dashboard', icon: LayoutDashboard, onClick: () => navigate('/provider/ProviderDashboard') },
-                        { name: 'Profile', icon: User, onClick: () => {} },
-                        { name: 'Help', icon: HelpCircle, onClick: () => navigate('#') },
-                        { name: 'Logout', icon: LogOut, onClick: () => navigate('/') }
-
-                    ].map((item, index) => (
-                        <a
-                            key={index}
-                            href="#"
-                            onClick={item.onClick}
-                            className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-[#7978E9] hover:translate-x-1"
-                        >
-                            {item.icon && <item.icon className="mr-2" size={20} />}
-                            {item.name}
-                        </a>
-                    ))}
-                </nav>
-            </aside>
+            <div className="bg-blue-500 text-white w-64 p-5 flex flex-col">
+                <h1 className="text-lg font-bold mb-5">Home Care Connect</h1>
+                <ul>
+                    <li onClick={() => navigate('/')}>Home</li>
+                    <li>Profile</li>
+                    <li>Logout</li>
+                </ul>
+            </div>
 
             {/* Main Content */}
-            <div className="flex-1 p-8 overflow-auto">
-                <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg ">
-                    <h2 className="text-3xl font-bold text-center mb-6 text-gray-800 mr-20 ">Provider Profile</h2>
+            <div className="flex-1 p-5">
+                <div className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
+                    <h2 className="text-2xl font-bold text-center mb-4">Provider Profile</h2>
 
-        <div className="space-y-4 ">
-  {[
-    { label: 'Full Name', value: provider.fullName },
-    { label: 'Username', value: provider.username },
-    { label: 'Email', value: provider.email },
-    { label: 'Phone Number', value: provider.phoneNumber },
-    { label: 'Service', value: provider.service }
-  ].map((item, index) => (
-    <div key={index} className="flex flex-col sm:flex-row sm:items-center sm:justify-start sm:space-x-4">
-      {/* Give the label a fixed width for consistent alignment */}
-      <span className="text-gray-800 font-bold sm:w-40 ml-8">{item.label}:</span>
-      {/* Ensure the value aligns left as well */}
-      <span className="text-gray-600">{item.value}</span>
-    </div>
-  ))}
+                    <div className="mb-4">
+                        <label className="block">Full Name:</label>
+                        <p>{provider.fullName}</p>
+                    </div>
 
-  <div className="flex items-center justify-start pt-4 space-x-4">
-    <span className="text-gray-800 font-bold sm:w-40 ml-8">Availability:</span>
-    <div className="flex items-center space-x-2">
-      <label className="inline-flex items-center cursor-pointer">
-        <input
-          type="checkbox"
-          checked={isAvailable}
-          onChange={handleAvailabilityToggle}
-          className="sr-only peer"
-        />
-        <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-      </label>
-      <span className="text-gray-600">{isAvailable ? 'Available' : 'Not Available'}</span>
-    </div>
-  </div>
-</div>
+                    <div className="mb-4">
+                        <label className="block">Username:</label>
+                        <p>{provider.username}</p>
+                    </div>
 
+                    <div className="mb-4">
+                        <label className="block">Email:</label>
+                        <p>{provider.email}</p>
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block">Phone Number:</label>
+                        <p>{provider.phoneNumber}</p>
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block">Service:</label>
+                        <p>{provider.service}</p>
+                    </div>
+
+                    <div className="mb-4 flex items-center justify-between">
+                        <span>Availability:</span>
+                        <div className="flex items-center">
+                            <label>{isAvailable ? 'Available' : 'Not Available'}</label>
+                            <input
+                                type="checkbox"
+                                checked={isAvailable}
+                                onChange={handleAvailabilityToggle}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

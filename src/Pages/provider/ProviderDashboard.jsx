@@ -100,9 +100,9 @@ const ProviderDashboard = () => {
       <div className="bg-[#4B49AC] text-white w-64 p-5 flex flex-col">
         <h1 className="text-lg font-bold mb-5">Home Care Connect</h1>
         <ul>
-          <li className="mb-4 hover:text-gray-300 cursor-pointer" onClick={() => navigate('/')}>Home</li>
+          <li className="mb-4 hover:text-gray-300 cursor-pointer" >Home</li>
           <li className="mb-4 hover:text-gray-300 cursor-pointer">Dashboard</li>
-          <li className="mb-4 hover:text-gray-300 cursor-pointer">Help</li>
+          <li className="mb-4 hover:text-gray-300 cursor-pointer" onClick={() => navigate('/provider/ProviderHelp')}>Help</li>
           <li className="mb-4 hover:text-gray-300 cursor-pointer" onClick={() => navigate('/provider/ProviderProfile')}>Profile</li>
           <li className="hover:text-gray-300 cursor-pointer">Logout</li>
         </ul>

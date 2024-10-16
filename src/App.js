@@ -14,6 +14,7 @@ import ProviderRegister from "./Pages/ProviderRegister/ProviderRegister"; // Adj
 import PlumberDashboard from './Pages/dashboard/PlumberDashboard';
 import ElectricityDashboard from './Pages/dashboard/ElectricityDashboard';
 import ProviderProfile from './Pages/provider/ProviderProfile';
+import ProviderHelp from './Pages/provider/ProviderHelp';
 function App() {
   return (
     <BrowserRouter>
@@ -31,6 +32,7 @@ function App() {
         <Route path="/plumber" element={<PlumberDashboard />} />
         <Route path="/electricity" element={<ElectricityDashboard />} />
         <Route path="/provider/ProviderProfile" element={<ProviderProfile />} />
+        <Route path="/provider/ProviderHelp" element={<ProviderHelp />} />
 
       </Routes>
     </BrowserRouter>

@@ -54,6 +54,7 @@ export default function UserProfile({ toggleProfile }) {
               onClick={() => {
                 if (index === 0) navigate('#');
                 if (index === 1) navigate('/dashboard/Dashboard');
+                if (index === 2) navigate('/UserRegister/CustomerHelp'); // Navigate to Customer Help page
                 if (index === 4) navigate('/');
               }}
               className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-[#7978E9] hover:translate-x-1"

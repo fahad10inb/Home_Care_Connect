@@ -21,7 +21,7 @@ export default function UserDashboard() {
             <User className="inline-block mr-2" size={20} />
             Dashboard
           </a>
-          <a href="/" className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#7978E9]">
+          <a href="/UserRegister/CustomerHelp" className="block py-2.5 px-4 rounded transition duration-200 hover:bg-[#7978E9]">
             <HelpCircle className="inline-block mr-2" size={20} />
             Help
           </a>

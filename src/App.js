@@ -15,6 +15,7 @@ import PlumberDashboard from './Pages/dashboard/PlumberDashboard';
 import ElectricityDashboard from './Pages/dashboard/ElectricityDashboard';
 import ProviderProfile from './Pages/provider/ProviderProfile';
 import ProviderHelp from './Pages/provider/ProviderHelp';
+import CustomerHelp from './Pages/UserRegister/CustomerHelp';
 function App() {
   return (
     <BrowserRouter>
@@ -33,6 +34,7 @@ function App() {
         <Route path="/electricity" element={<ElectricityDashboard />} />
         <Route path="/provider/ProviderProfile" element={<ProviderProfile />} />
         <Route path="/provider/ProviderHelp" element={<ProviderHelp />} />
+        <Route path="/UserRegister/CustomerHelp" element={<CustomerHelp />} />
 
       </Routes>
     </BrowserRouter>
